@@ -2,13 +2,15 @@
 name = "exilecompendium"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Cédric Toupin <ced.toup@hotmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
 pre-commit = "^3.5.0"
-
+farm-haystack = "^1.21.2"
+beautifulsoup4 = "^4.12.2"
+chainlit = "^0.7.301"
 
 [build-system]
 requires = ["poetry-core"]

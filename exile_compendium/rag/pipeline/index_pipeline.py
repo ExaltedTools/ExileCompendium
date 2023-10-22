@@ -5,7 +5,7 @@ from rag.fetch.poe_wiki_fetcher import WikiFetcher
 
 
 class IndexPipeline:
-    def index():
+    def index(self):
         document_store = WeaviateDocumentStore(
             host="http://localhost", port=8080, embedding_dim=1024
         )

@@ -1,8 +1,7 @@
 from haystack import Pipeline
 from haystack.document_stores import WeaviateDocumentStore
-from haystack.nodes import (AnswerParser, EmbeddingRetriever, PromptModel,
-                            PromptNode, PromptTemplate)
-from haystack.utils import print_documents
+from haystack.nodes import (AnswerParser, EmbeddingRetriever, PromptNode,
+                            PromptTemplate)
 
 
 class QueryPipeline:

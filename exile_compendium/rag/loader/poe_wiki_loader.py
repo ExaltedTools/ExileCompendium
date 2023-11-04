@@ -1,17 +1,15 @@
 import re
-from typing import Dict, List, Tuple
+from typing import List
 
 import requests
 from bs4 import BeautifulSoup
-from haystack.nodes.base import BaseComponent
-from haystack.schema import Document
+from langchain.docstore.document import Document
+from langchain.document_loaders.base import BaseLoader
 
 
-class WikiFetcher(BaseComponent):
+class WikiLoader(BaseLoader):
     base_url = "https://www.poewiki.net/api.php"
     header = ["title", "content"]
-
-    outgoing_edges = 1
 
     def request_pages(self, apfrom):
         params = {
@@ -41,36 +39,29 @@ class WikiFetcher(BaseComponent):
         return requests.get(self.base_url, params=params).json()
 
     def html_to_text(self, html):
-        soup = BeautifulSoup(html, features="html.parser")
+        extract_html = re.sub("<!--.*?-->", "", html, flags=re.DOTALL)
+        soup = BeautifulSoup(extract_html, features="html.parser")
         return soup.get_text()
 
-    def run(self) -> Tuple[Dict[str, List[Document]], str]:
+    def load(self) -> List[Document]:
         documents: List[Document] = []
 
         pages_response = self.request_pages(None)
-        i = 0
-        while "continue" in pages_response and i < 50:
+        while "continue" in pages_response:
             pages_response = self.request_pages(
                 pages_response["continue"]["apcontinue"]
             )
             for page in pages_response["query"]["allpages"]:
                 title = page["title"]
                 print(title)
-                i += 1
                 extract_response = self.get_page_extract(title)
-                for extract in extract_response["query"]["pages"]:
-                    extract_html = re.sub(
-                        "<!--.*?-->", "", extract["extract"], flags=re.DOTALL
-                    )
+                for extract_obj in extract_response["query"]["pages"]:
+                    extract = extract_obj["extract"]
                     documents.append(
                         Document(
-                            content=self.html_to_text(extract_html),
-                            meta={"title": title},
+                            page_content=self.html_to_text(extract),
+                            metadata={"title": title},
                         )
                     )
 
-        results = {"documents": documents}
-        return results, "output_1"
-
-    def run_batch(self):
-        return self.run()
+        return documents

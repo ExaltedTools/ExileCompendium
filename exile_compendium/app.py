@@ -1,7 +1,8 @@
+from dotenv import load_dotenv
 from rag.pipeline.query_pipeline import QueryPipeline
+
+load_dotenv()
 
 if __name__ == "__main__":
     # IndexPipeline().index()
-
-    result = QueryPipeline().query("What is the Automaton Halo?")
-    print(result["answers"][0].answer)
+    QueryPipeline().query("List me some of the league mechanics")

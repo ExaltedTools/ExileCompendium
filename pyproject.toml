@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "exilecompendium"
+version = "0.1.0"
+description = ""
+authors = ["Cédric Toupin <ced.toup@hotmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pre-commit = "^3.5.0"
+beautifulsoup4 = "^4.12.2"
+langchain = "^0.0.323"
+weaviate-client = "^3.24.2"
+python-dotenv = "^1.0.0"
+sentence-transformers = "^2.2.2"
+transformers = "^4.34.1"
+torch = {version = "^2.1.0+cu121", source = "pytorch"}
+torchvision = {version = "^0.16.0+cu121", source = "pytorch"}
+protobuf = "^4.24.4"
+llama-cpp-python = "^0.2.11"
+
+[[tool.poetry.source]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cu121"
+priority = "explicit"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
